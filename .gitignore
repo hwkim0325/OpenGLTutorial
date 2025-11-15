@@ -42,3 +42,4 @@
 *.log
 *.recipe
 /.vs
+*.txt
