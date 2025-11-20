@@ -107,15 +107,22 @@ int main()
 
 	// vertex array
 	float vertices[] = {
-		-0.5f, -0.5f, 0.0f,
-		0.0f, 0.5f, 0.0f,
-		0.5f, -0.5f, 0.0f
+		0.5f, 0.5f, 0.0f, // top right
+		-0.5f, 0.5f, 0.0f, // top left
+		-0.5f, -0.5f, 0.0f, // bottom left
+		0.5f, -0.5f, 0.0f, // bottom right
+	};
+
+	unsigned int indices[] = {
+		0, 1, 2, // first triangle
+		2, 3, 0 // second trinalg
 	};
 
 	// VAO, VBO
-	unsigned int VAO, VBO;
+	unsigned int VAO, VBO, EBO;
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
+	glGenBuffers(1, &EBO);
 
 	// bind VAO
 	glBindVertexArray(VAO);
@@ -127,6 +134,10 @@ int main()
 	// set attribute pointer
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
+
+	// set up EBO
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -140,7 +151,8 @@ int main()
 		// draw shapes
 		glBindVertexArray(VAO);
 		glUseProgram(shaderProgram);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		//glDrawArrays(GL_TRIANGLES, 0, 6);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 		// send new frame to window
 		glfwSwapBuffers(window);
